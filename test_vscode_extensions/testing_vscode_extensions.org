@@ -1,0 +1,275 @@
+# -*- org-confirm-babel-evaluate: nil; -*-
+#+AUTHOR: Dan Čermák
+#+DATE: 20.2.2021
+#+EMAIL: dcermak@suse.com
+#+TITLE: Testing VSCode extensions
+
+#+REVEAL_ROOT: ../node_modules/reveal.js/
+#+REVEAL_THEME: simple
+#+REVEAL_PLUGINS: (highlight notes history)
+#+OPTIONS: toc:nil
+#+REVEAL_DEFAULT_FRAG_STYLE: appear
+#+REVEAL_INIT_OPTIONS: transition: 'none', hash: true
+#+OPTIONS: num:nil toc:nil center:nil reveal_title_slide:nil
+#+REVEAL_EXTRA_CSS: ../node_modules/@fortawesome/fontawesome-free/css/all.min.css
+#+REVEAL_HIGHLIGHT_CSS: ../node_modules/reveal.js/plugin/highlight/zenburn.css
+
+#+REVEAL_TITLE_SLIDE: <h2 class="title">%t</h2>
+#+REVEAL_TITLE_SLIDE: <p class="subtitle" style="color: Gray;">%s</p>
+#+REVEAL_TITLE_SLIDE: <p class="author">%a <%e></p>
+#+REVEAL_TITLE_SLIDE: DevConf.cz 2021, %d
+#+REVEAL_TITLE_SLIDE: <p xmlns:dct="http://purl.org/dc/terms/" xmlns:cc="http://creativecommons.org/ns#">This work is licensed under <a href="https://creativecommons.org/licenses/by/4.0" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">
+#+REVEAL_TITLE_SLIDE: CC BY 4.0 <i class="fab fa-creative-commons"></i> <i class="fab fa-creative-commons-by"></i></a></p>
+
+
+* whoami
+
+Dan Čermák
+
+#+REVEAL_HTML: <p style="text-align:left">
+#+REVEAL_HTML: <ul>
+#+REVEAL_HTML: <li>Software Developer @SUSE
+#+REVEAL_HTML: <li>I <i class="far fa-heart"></i> testing</li>
+#+REVEAL_HTML: <li style="list-style-type:none;"> </li>
+#+REVEAL_HTML: <li style="list-style-type:none;"><i class="fab fa-github"></i> <a href="https://github.com/D4N/">D4N</a> / <a href="https://github.com/dcermak/">dcermak</a></li>
+#+REVEAL_HTML: <li style="list-style-type:none;"><i class="fab fa-mastodon"></i> <a href="https://mastodon.social/@Defolos">@Defolos@mastodon.social</a></li>
+#+REVEAL_HTML: <li style="list-style-type:none;"><i class="fab fa-twitter"></i> <a href="https://twitter.com/DefolosDC/">@DefolosDC</a></li>
+#+REVEAL_HTML: </ul>
+
+
+* Agenda
+
+  - [[Testing Extensions][Testing Extensions]]
+    - [[Unit testing][Unit testing]]
+    - [[Manual testing][Manual testing]]
+    - [[Integration testing][Integration testing]]
+  - [[Questions?][Q&A]]
+
+* Visual Studio Code
+
+#+BEGIN_NOTES
+- Cross platform IDE
+- Built with Typescript and Electron
+- Highly popular: 7.2% in 2016, 24% in 2017, 34% in 2018, 50% in 2019 (stackoverflow developer survey)​
+- Rich extension ecosystem
+- Well documented extension API
+- good API documentation, nice introductory tutorials, official extension example repository (not just hello world!)​
+#+END_NOTES
+
+#+REVEAL_HTML: <img src="images/vscode.png" height="80%" width="80%"/>
+
+* Testing Extensions
+
+#+begin_notes
+- UI itself needs a *ton* of state: UI state influences reactions \rarr has to be provided/mocked
+- unit test should check just one thing \rarr not appropriate for workflows
+  (my impression is that unit tests are most popular)
+- you can easily unit test output that is never shown, check the wrong parts,
+  certain parts can not be unit tested (e.g. which buttons are shown when)
+#+end_notes
+
+Why is it hard?
+
+#+ATTR_REVEAL: :frag (appear)
+- UIs cary a lot of state
+- testing workflows is uncommon
+- what you get is not what you see
+
+
+* Unit testing
+
+#+begin_notes
+- unit tests check one functionality of one isolated chunk
+- all the state that is setup by the editor has to be setup by *you*: Trees, Documents, TextEditor entries, etc.
+  this state influences what your API will output
+- mock anything external \rarr can cause issues if APIs change: your tests pass but it fails in practice
+#+end_notes
+
+#+ATTR_REVEAL: :frag (appear)
+- test one functionality of one unit/function
+- anything touching the UI needs extensive setup & teardown
+- external services need to be mocked
+
+
+** Getting started
+
+#+BEGIN_NOTES
+- official docs have minimal viable example
+- uses vscode-test module: launches a temporary vscode instance with your extension installed
+  (and your custom settings if you want any)
+- does *not* work with standard code coverage (e.g. nyc)
+  you have to go through some extra hoops (courtesy of [[https://github.com/connor4312][Connor Peet]])
+#+END_NOTES
+
+#+ATTR_REVEAL: :frag (appear)
+- documentation has an example setup
+- code coverage setup [[https://github.com/microsoft/vscode-js-debug/blob/master/src/test/testRunner.ts][more involved]]
+
+
+** Extension Settings
+
+#+begin_notes
+- settings are stored in a json file
+- can be written and read from vscode-test ()
+#+end_notes
+
+#+ATTR_REVEAL: :frag appear :frag_idx 1
+- can be read & modified in tests
+
+#+REVEAL_HTML: <p data-fragment-index="2" class="fragment appear"><i class="fas fa-broom"></i> clean up after yourself!</p>
+
+
+** Events
+
+#+begin_notes
+- commonly used to notify of changes
+- events don't await Promises returned by event listeners!
+\Rightarrow use a custom implementation when passing Events into tested code (\rarr don't have to add delays)
+#+end_notes
+
+#+begin_src typescript
+quickPick.onDidChangeValue(async (val: string) => {
+  if (verifyInput(val)) {
+    await launchBackgroundTask();
+  }
+});
+#+end_src
+
+#+ATTR_REVEAL: :frag (appear)
+\rarr use fake events when possible
+
+
+** Disposables
+
+#+begin_notes
+- disposables are workarounds for destructors not existing in JS:
+  unsubscribe events, free resources, remove commands
+- run them in ~afterEach()~, ~after()~
+#+end_notes
+
+#+ATTR_REVEAL: :frag (appear)
+- "destructors" in VSCode
+- use ~after()~ or ~afterEach()~
+
+
+** UI Elements
+
+#+begin_notes
+- only check parts of the data structures that you care about (e.g. the icon)
+- don't test too much of the UI, only check conversion of your internal state to UI
+#+end_notes
+
+#+ATTR_REVEAL: :frag (appear)
+- only check the *interesting* parts
+- preferably keep UI part as small as possible
+- split UI specific parts out of your code
+
+
+* Manual testing
+
+#+begin_notes
+- manual testing appropriate when expected future changes small
+- write down all the steps (\rarr test plan) with *clearly defined* expected results
+- consider using a test management system, e.g. [[https://kiwitcms.org/][Kiwi TCMS]]
+#+end_notes
+
+#+REVEAL_HTML: <p data-fragment-index="1" class="fragment appear">
+#+REVEAL_HTML: <i class="fas fa-keyboard"></i> <i class="fas fa-mouse"></i> Do it yourself
+
+
+#+REVEAL_HTML: <p data-fragment-index="2" class="fragment appear">
+#+REVEAL_HTML: <i class="fas fa-map-marked"></i> Make a test plan</p>
+
+
+* Integration testing
+
+#+begin_notes
+- run workflows automated
+- test the *full* extension
+- need something to provide input & verify the view in vscode
+#+end_notes
+
+#+REVEAL_HTML: <i class="fas fa-robot"></i> automated execution of your extensions' workflows
+
+** vscode-extension-tester
+
+#+begin_notes
+- vscode is just a webpage (electron…) \rarr use existing tooling for end-to-end testing
+- selenium webdriver: framework for functional testing of webpages
+- vscode extension tester wraps selenium's page object API \rarr more convenient to work with
+#+end_notes
+
+#+REVEAL_HTML: <i class="fab fa-github"></i>
+#+REVEAL_HTML: <a href="https://github.com/redhat-developer/vscode-extension-tester">redhat-developer/vscode-extension-tester</a>
+
+#+REVEAL_HTML: leverages selenium webdriver <img src="images/Selenium_Logo.png" height="64" width="64"/>
+
+#+ATTR_REVEAL: :frag appear :frag_idx 2
+#+begin_src typescript
+const editor = new TextEditor();
+const pkgJsonEditor = await new EditorView().openEditor('package.json');
+
+await pkgJsonEditor.setText('{"foo": [1, 2, 3], "bar": "baz"}');
+await pkgJsonEditor.formatDocument();
+#+end_src
+
+
+** What to test?
+
+#+begin_notes
+- try to test your main workflow that *must* work for releases
+- test runs take quite long \rarr use 80/20% rule to catch most
+#+end_notes
+
+#+ATTR_REVEAL: :frag (appear)
+- check your main workflow(s)
+- don't test corner cases & minor regressions
+
+
+** How to test?
+
+#+begin_notes
+- upstream uses mocha and is tailored towards it \rarr use that if possible
+- mocha has root hooks that run before and after a test suite
+  \rarr run setup there or via script
+- consider to override environment variables, e.g. ~HOME~, ~LD_LIBRARY_PATH~, ~LD_PRELOAD~, etc.
+- run your whole workflow in a ~describe()~ with each step as a ~it()~
+  \rarr caveat: you *must not* run tests in parallel!
+#+end_notes
+
+#+ATTR_REVEAL: :frag (appear)
+- upstream using [[https://mochajs.org/][mocha]]
+- use [[https://mochajs.org/#root-hook-plugins][root hooks]] for setup
+- run steps as individual ~it()~
+
+
+** Catches
+
+#+begin_notes
+- vscode extension tester is pretty heavy (webdriver+vscode+node)
+  \rarr if your machine is under heavy load, your tests will fail with timeouts!
+- unfortunately upstream examples have a manual delays
+  (\rarr will work on your machine, not on CI!)
+- some buttons are invisible, unless you hover with the mouse over them
+  \rarr you actually must move the mouse there, otherwise the element is not present in the DOM and will *not* be found
+- forget about test coverage: your extension is launched in a completely
+  separate process (maybe via a lot of hackery somehow possible)
+#+end_notes
+
+#+ATTR_REVEAL: :frag (appear)
+- integration tests tend to be very slow and resource demanding
+- avoid explicit sleeps
+- certain elements invisible by default
+- *no* test coverage
+
+* Legal
+
+- [[https://commons.wikimedia.org/wiki/File:Selenium_Logo.png][Selenium Logo]] CC-BY-SA 4.0
+- [[https://revealjs.com/][reveal.js]] MIT
+- [[https://fontawesome.com/][Font Awesome]] CC-BY-4.0 and SIL OFL 1.1 and MIT
+- everything else is my work under CC-BY-4.0
+
+* Questions?
+
+#+ATTR_REVEAL: :frag appear :frag_idx 2
+Thank you for your time!

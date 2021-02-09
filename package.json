@@ -1,0 +1,14 @@
+{
+  "name": "devconf.cz_2021",
+  "version": "0.0.1",
+  "description": "My talks for DevConf.cz 2021",
+  "author": "Dan Čermák <dan.cermak@cgc-instruments.com>",
+  "license": "CC-BY-SA-4.0",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": ">= 5.15",
+    "reveal.js": ">= 4.1"
+  },
+  "devDependencies": {
+    "eos-icons": ">= 4.12"
+  }
+}
