@@ -1,0 +1,287 @@
+# -*- org-confirm-babel-evaluate: nil; -*-
+#+AUTHOR: Dan Čermák
+#+DATE: 20.2.2021
+#+EMAIL: dcermak@suse.com
+#+TITLE: openQA
+#+SUBTITLE: End to End Testing of Operating Systems
+
+#+REVEAL_ROOT: ../node_modules/reveal.js/
+#+REVEAL_THEME: simple
+#+REVEAL_PLUGINS: (highlight notes history)
+#+OPTIONS: toc:nil
+#+REVEAL_DEFAULT_FRAG_STYLE: appear
+#+REVEAL_INIT_OPTIONS: transition: 'none', hash: true
+#+OPTIONS: num:nil toc:nil center:nil reveal_title_slide:nil
+#+REVEAL_EXTRA_CSS: ../node_modules/@fortawesome/fontawesome-free/css/all.min.css
+#+REVEAL_HIGHLIGHT_CSS: ../node_modules/reveal.js/plugin/highlight/zenburn.css
+
+#+REVEAL_TITLE_SLIDE: <h2 class="title"><img src="./media/openqa_logo.svg" height="100px" style="margin-bottom:0px"/> %t</h2>
+#+REVEAL_TITLE_SLIDE: <p class="subtitle" style="color: Gray;">%s</p>
+#+REVEAL_TITLE_SLIDE: <p class="author">%a %e</p>
+#+REVEAL_TITLE_SLIDE: <img src="./media/devconf-cz-bw.svg" height="50px"/>
+#+REVEAL_TITLE_SLIDE: <p class="date">%d</p>
+#+REVEAL_TITLE_SLIDE: <p xmlns:dct="http://purl.org/dc/terms/" xmlns:cc="http://creativecommons.org/ns#"><a href="https://creativecommons.org/licenses/by/4.0" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">
+#+REVEAL_TITLE_SLIDE: CC BY 4.0 <i class="fab fa-creative-commons"></i> <i class="fab fa-creative-commons-by"></i></a></p>
+
+
+* whoami
+
+Dan Čermák
+
+#+REVEAL_HTML: <p style="text-align:left">
+#+REVEAL_HTML: <ul>
+# #+REVEAL_HTML: <li>Software Developer @SUSE
+#+REVEAL_HTML: <li style="list-style-type:none;"><i class="fab fa-suse"></i> Software Developer @SUSE
+#+REVEAL_HTML: <li style="list-style-type:none;"><i class="fab fa-fedora"></i> i3 SIG, Package maintainer
+#+REVEAL_HTML: <li style="list-style-type:none;"><i class="far fa-heart"></i> testing</li>
+#+REVEAL_HTML: <li style="list-style-type:none;">&nbsp</li>
+#+REVEAL_HTML: <li style="list-style-type:none;"><i class="fab fa-github"></i> <a href="https://github.com/D4N/">D4N</a> / <a href="https://github.com/dcermak/">dcermak</a></li>
+#+REVEAL_HTML: <li style="list-style-type:none;"><i class="fab fa-mastodon"></i> <a href="https://mastodon.social/@Defolos">@Defolos@mastodon.social</a></li>
+#+REVEAL_HTML: <li style="list-style-type:none;"><i class="fab fa-twitter"></i> <a href="https://twitter.com/DefolosDC/">@DefolosDC</a></li>
+#+REVEAL_HTML: </ul>
+
+
+* TODO Agenda
+
+  - [[What is openQA?][What is openQA?]]
+  - [[Using openQA][Using openQA]]
+  - [[Questions?][Questions?]]
+
+
+* What is openQA?
+
+#+begin_notes
+- web frontend, actually whole framework to test a SUT
+- tests are SUT centric, not application/library centric!
+
+- automates user input (key presses, mouse movement)
+- grab video feed from SUT \rarr image recognition via OpenCV
+- operating system agnostic
+#+end_notes
+
+#+ATTR_REVEAL: :frag (appear)
+- a web application
+- automated test framework for a SUT
+
+- simulate user input
+- match video feed using OpenCV
+
+
+** Architecture
+
+#+BEGIN_NOTES
+- openQA runs web app & REST API (\rarr for client libraries)
+  schedules tests, stores test results & artifacts
+- individual tests dispatched to workers (can be other machine or the same)
+- worker spawns =os-autoinst= on SUT (usually qemu, can be bare metal or other virt)
+- =os-autoinst= does heavy lifting: issue input, record output, match images
+#+END_NOTES
+
+#+REVEAL_HTML: <img src="./media/openqa_architecture.svg" height="500px"/>
+
+
+** Web UI
+
+#+REVEAL_HTML: <img src="./media/screenshot_openqa_webui.png"/>
+
+#+REVEAL: split
+
+#+REVEAL_HTML: <video height="600" controls>
+#+REVEAL_HTML: <source src="media/openqa_output.mkv" type="video/mp4">
+#+REVEAL_HTML: </video>
+
+** Image recognition
+
+#+begin_notes
+video matched via *needles*:
+- json & png with areas & similarity level
+- needles specify tags (used by testapi \rarr needles matched by tag, not by filename)
+- =isotovideo= matches needles against video feed received via VNC
+- areas matched needn't be in same position w.r.t each other
+- matching occurs about once per sec
+
+\Rightarrow show needle editor
+#+end_notes
+
+#+REVEAL_HTML: <img src="./media/openqa_needle_view.png" height="500px"/>
+
+
+** Features
+
+#+begin_notes
+- test results can be collected & uploaded (e.g. VM disk or files)
+- tests can depend on each other \rarr are scheduled accordingly & displayed in the webUI
+  *FIXME* show an example?
+- full workflows can be tagged, reviewed
+- attach labels for bugs/features/issues to tests via comments
+- test groups that run "scenarios" (= test with additional parameters)
+- plethora of backends besides qemu: ipmi, x3270 (for s390), bare metal
+#+end_notes
+
+#+ATTR_REVEAL: :frag (appear)
+- produce test artifacts & handle assets
+- dependency between tests & scheduling
+- tag & review workflows and tests
+- test grouping
+- support qemu/libvirt, ipmi, bare metal, x3270
+
+
+** =testapi=
+
+#+begin_src perl
+  sub run() {
+      x11_start_program('firefox');
+
+      send_key('alt-h');
+      assert_screen('firefox_context_help_menu');
+
+      send_key('a');
+      assert_screen('firefox_about_firefox_window');
+
+      send_key_until_needlematch('desktop', 'alt-f4');
+  }
+#+end_src
+
+
+* Using openQA
+
+** When to use openQA
+
+#+REVEAL_HTML: <ul style="list-style-type:none;">
+#+REVEAL_HTML: <li class="fragment appear"><i class="fas fa-robot"></i> automate the boring stuff</li>
+#+REVEAL_HTML: <li class="fragment appear"><i class="fas fa-satellite-dish"></i> tests require specific hardware</li>
+#+REVEAL_HTML: <li class="fragment appear"><i class="fas fa-compact-disc"></i> you ship an appliance</li>
+#+REVEAL_HTML: <li class="fragment appear">few testers, but enough hardware</li>
+#+REVEAL_HTML: </ul>
+
+** When *not* to use openQA
+
+#+REVEAL_HTML: <ul style="list-style-type:none;">
+#+REVEAL_HTML: <li class="fragment appear"><i class="fas fa-shipping-fast"></i> quick reactions to input required</li>
+#+REVEAL_HTML: <li class="fragment appear"><i class="fas fa-tachometer-alt"></i> fast tests required</li>
+#+REVEAL_HTML: <li class="fragment appear"><i class="fas fa-satellite"></i> <b>really</b> exotic hardware
+# #+REVEAL_HTML: <i class="far fa-thumbs-down"></i>
+#+REVEAL_HTML: </ul>
+
+
+** Why should you use openQA?
+
+#+REVEAL_HTML: <ul>
+#+REVEAL_HTML: <li class="fragment appear">battle tested</li>
+#+REVEAL_HTML: <li class="fragment appear">user-centric testing</li>
+#+REVEAL_HTML: <li class="fragment appear"><a href="https://linux-test-project.github.io/">LTP</a> integration</li>
+#+REVEAL_HTML: <li class="fragment appear"> used by <i class="fab fa-suse"></i>, <i class="fab fa-fedora"></i>, <i class="fab fa-redhat"></i>, …</li>
+#+REVEAL_HTML: </ul>
+
+
+** Getting started
+
+#+ATTR_REVEAL: :frag (appear)
+- get your feet wet on an existing instance
+- setup a [[https://open.qa/docs/#installing][local instance]]
+- read the [[https://open.qa/docs/][documentation]]
+- watch the [[https://www.youtube.com/playlist?list=PL_AMhvchzBacIVzu9fQCc3jIY-S37DHXE][tutorials]]
+
+#+REVEAL: split
+
+recommended steps:
+
+#+ATTR_REVEAL: :frag (appear)
+1. start by modifying needles
+2. extend existing tests
+3. write your own tests
+4. add your own test group and schedule it
+
+
+** Starting from scratch
+
+#+REVEAL_HTML: Here be <i class="fas fa-dragon"></i>
+
+#+ATTR_REVEAL: :frag (appear)
+- no scheduler needed? \rarr [[http://open.qa/docs/#_container_based_setup][Container based setup]]
+
+#+REVEAL_HTML: <ol class="fragment appear">
+#+REVEAL_HTML: <li class="fragment appear">start from the <a href="https://github.com/os-autoinst/os-autoinst-distri-example">minimal example</a></li>
+#+REVEAL_HTML: <li class="fragment appear">schedule tests in <code>main.pm</code></li>
+#+REVEAL_HTML: <li class="fragment appear">learn about job groups &amp; test suites</li>
+#+REVEAL_HTML: <li class="fragment appear"> <i class="fas fa-magic"></i></li>
+#+REVEAL_HTML: <li class="fragment appear">🎉</li>
+#+REVEAL_HTML: </ol>
+
+
+** Example: bare metal testing the RPi
+
+#+begin_notes
+- have to power cycle the Pi (\rarr e.g. Kasa wifi plug or PoE)
+- need to reflash the image (\rarr USB-SD-Mux from Linux Automation GmbH)
+
+workflow:
+1. worker (can be any machine) uploads new image to SD card
+2. power cycle the Pi
+3. connect via serial line
+4. login & setup ssh connection for vnc
+5. run tests \rarr *PROFIT!*
+
+on failure:
+- try to shutdown via serial line
+- turn pi off forcefully
+
+future additions:
+- test HDMI output too
+#+end_notes
+
+#+REVEAL_HTML: <img src="./media/rpi_testing.svg" height="500px"/>
+
+
+# ** Anatomy of a test group
+
+# #+ATTR_REVEAL: :frag (appear)
+# -
+
+
+# * Recent development & Outlook
+
+# #+ATTR_REVEAL: :frag (appear)
+# -
+
+
+* TODO Use it!
+
+# maybe a funny picture in here?
+
+
+* Get help
+
+on chat.freenode.net:
+
+- [[irc:#opensuse-factory:chat.freenode.net][#opensuse-factory]]
+- [[irc:#fedora-qa:chat.freenode.net][#fedora-qa]]
+
+
+* Links
+
+#+REVEAL_HTML: <ul>
+#+REVEAL_HTML: source code: <li style="list-style-type:none;"><i class="fab fa-github"></i>
+#+REVEAL_HTML: <a href="https://github.com/os-autoinst/">os-autoinst</a>
+#+REVEAL_HTML: </li>
+#+REVEAL_HTML: <li style="list-style-type:none;"><a href="https://open.qa">openQA homepage</a></li>
+#+REVEAL_HTML: <li style="list-style-type:none;"><a href="https://openqa.opensuse.org">openSUSE's instance</a></li>
+#+REVEAL_HTML: <li style="list-style-type:none;"><a href="https://openqa.fedoraproject.org">Fedora's instance</a></li>
+#+REVEAL_HTML: </ul>
+
+
+* TODO Legal
+
+- [[https://raw.githubusercontent.com/os-autoinst/openQA/master/assets/images/logo.svg][openQA Logo]] GPL-2.0-or-later
+- [[https://opencv.org/wp-content/uploads/2020/07/OpenCV_logo_black.svg][OpenCV Logo]] *FIXME*
+- [[https://raw.githubusercontent.com/devconfcz/devconf/master/assets/media/logo/devconf-cz/devconf-cz-bw.svg][DevConf CZ Logo]]  GPL-3.0-or-later or GPL-3.0
+- [[https://upload.wikimedia.org/wikipedia/en/c/cb/Raspberry_Pi_Logo.svg][Raspberry Pi Logo]] \copy and \trade of the Raspberry Pi Foundation
+- [[https://revealjs.com/][reveal.js]] MIT
+- [[https://fontawesome.com/][Font Awesome]] CC-BY-4.0 and SIL OFL 1.1 and MIT
+- [[https://eos-icons.com/][EOS Icons]] MIT
+
+
+* Questions?
+
+#+ATTR_REVEAL: :frag (appear)
+*Answers!*
