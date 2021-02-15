@@ -245,9 +245,9 @@ future additions:
 # -
 
 
-* TODO Use it!
+* Use it!
 
-# maybe a funny picture in here?
+#+REVEAL_HTML: <img src="./media/771px-Unclesamwantyou.svg" height="500px"/>
 
 
 * Get help
@@ -279,6 +279,7 @@ on chat.freenode.net:
 - [[https://revealjs.com/][reveal.js]] MIT
 - [[https://fontawesome.com/][Font Awesome]] CC-BY-4.0 and SIL OFL 1.1 and MIT
 - [[https://eos-icons.com/][EOS Icons]] MIT
+- [[https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Unclesamwantyou.jpg/771px-Unclesamwantyou.jpg][U.S. Army recruitment poster]] public domain
 
 
 * Questions?
