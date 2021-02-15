@@ -13,6 +13,7 @@
 #+REVEAL_INIT_OPTIONS: transition: 'none', hash: true
 #+OPTIONS: num:nil toc:nil center:nil reveal_title_slide:nil
 #+REVEAL_EXTRA_CSS: ../node_modules/@fortawesome/fontawesome-free/css/all.min.css
+#+REVEAL_EXTRA_CSS: ../node_modules/eos-icons/dist/css/eos-icons.css
 #+REVEAL_HIGHLIGHT_CSS: ../node_modules/reveal.js/plugin/highlight/zenburn.css
 
 #+REVEAL_TITLE_SLIDE: <h2 class="title"><img src="./media/openqa_logo.svg" height="100px" style="margin-bottom:0px"/> %t</h2>
@@ -66,6 +67,25 @@ Dan Čermák
 - match video feed using OpenCV
 
 
+** TODO Sales Pitch
+
+#+begin_notes
+Why should you all care?
+- automates user input \rarr auto test appliance
+- can run tests on nearly any\trade hardware (with limitations)
+- tagging & labeling according to regexes,
+  carry over of attached bug reports,
+  various failure states
+  \Rightarrow use for reviews of a full test suite run
+#+end_notes
+
+Why should I use openQA?
+#+ATTR_REVEAL: :frag (appear)
+- automate manual system level testing
+- @@html: <i class='eos-icons'>developer_board</i>@@ runs on bare metal
+- test labeling: @@html:<i class="fas fa-tags"></i>@@, @@html:<i class="fas fa-bug"></i>@@ and reviews @@html: <i class="eos-icons">rate_review</i>@@
+
+
 ** Architecture
 
 #+BEGIN_NOTES
@@ -74,6 +94,7 @@ Dan Čermák
 - individual tests dispatched to workers (can be other machine or the same)
 - worker spawns =os-autoinst= on SUT (usually qemu, can be bare metal or other virt)
 - =os-autoinst= does heavy lifting: issue input, record output, match images
+- =os-autoinst= communicates via serial line by default (can be "upgraded" later on)
 #+END_NOTES
 
 #+REVEAL_HTML: <img src="./media/openqa_architecture.svg" height="500px"/>
@@ -235,10 +256,20 @@ future additions:
 # -
 
 
-# * Recent development & Outlook
+* TODO Recent development & Outlook
 
-# #+ATTR_REVEAL: :frag (appear)
-# -
+#+BEGIN_NOTES
+- clone tests & needles from git via variables
+- automatically label jobs via regex in tickets
+- "investigation jobs" = auto restart on failure
+- hooks for various job finish states: [[http://open.qa/docs/#_enable_custom_hook_scripts_on_job_done_based_on_result][docs]]
+#+END_NOTES
+
+#+ATTR_REVEAL: :frag (appear)
+- Run test code from any git repository
+- Automatic job labelling based on expressions in tickets
+- Automatic investigation jobs on failures
+- post job hooks
 
 
 * Use it!
