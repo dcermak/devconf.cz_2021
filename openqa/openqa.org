@@ -30,7 +30,6 @@ Dan Čermák
 
 #+REVEAL_HTML: <p style="text-align:left">
 #+REVEAL_HTML: <ul>
-# #+REVEAL_HTML: <li>Software Developer @SUSE
 #+REVEAL_HTML: <li style="list-style-type:none;"><i class="fab fa-suse"></i> Software Developer @SUSE
 #+REVEAL_HTML: <li style="list-style-type:none;"><i class="fab fa-fedora"></i> i3 SIG, Package maintainer
 #+REVEAL_HTML: <li style="list-style-type:none;"><i class="far fa-heart"></i> testing</li>
@@ -45,7 +44,7 @@ Dan Čermák
 
   - [[What is openQA?][What is openQA?]]
   - [[Using openQA][Using openQA]]
-  - [[Questions?][Questions?]]
+  - [[Questions? / Demo][Questions? / Demo]]
 
 
 * What is openQA?
@@ -160,18 +159,16 @@ video matched via *needles*:
 #+REVEAL_HTML: <li class="fragment appear"><i class="fas fa-shipping-fast"></i> quick reactions to input required</li>
 #+REVEAL_HTML: <li class="fragment appear"><i class="fas fa-tachometer-alt"></i> fast tests required</li>
 #+REVEAL_HTML: <li class="fragment appear"><i class="fas fa-satellite"></i> <b>really</b> exotic hardware
-# #+REVEAL_HTML: <i class="far fa-thumbs-down"></i>
 #+REVEAL_HTML: </ul>
 
 
 ** Why should you use openQA?
 
-#+REVEAL_HTML: <ul>
-#+REVEAL_HTML: <li class="fragment appear">battle tested</li>
-#+REVEAL_HTML: <li class="fragment appear">user-centric testing</li>
-#+REVEAL_HTML: <li class="fragment appear"><a href="https://linux-test-project.github.io/">LTP</a> integration</li>
-#+REVEAL_HTML: <li class="fragment appear"> used by <i class="fab fa-suse"></i>, <i class="fab fa-fedora"></i>, <i class="fab fa-redhat"></i>, …</li>
-#+REVEAL_HTML: </ul>
+#+ATTR_REVEAL: :frag (appear)
+- battle tested
+- user-centric testing
+- [[https://linux-test-project.github.io/][LTP]] integration
+- used by @@html: <i class="fab fa-suse"></i>, <i class="fab fa-fedora"></i>, <i class="fab fa-redhat"></i>@@, …
 
 
 ** Getting started
@@ -195,18 +192,17 @@ recommended steps:
 
 ** Starting from scratch
 
-#+REVEAL_HTML: Here be <i class="fas fa-dragon"></i>
+Here be @@html: <i class="fas fa-dragon"></i>@@
 
 #+ATTR_REVEAL: :frag (appear)
 - no scheduler needed? \rarr [[http://open.qa/docs/#_container_based_setup][Container based setup]]
 
-#+REVEAL_HTML: <ol class="fragment appear">
-#+REVEAL_HTML: <li class="fragment appear">start from the <a href="https://github.com/os-autoinst/os-autoinst-distri-example">minimal example</a></li>
-#+REVEAL_HTML: <li class="fragment appear">schedule tests in <code>main.pm</code></li>
-#+REVEAL_HTML: <li class="fragment appear">learn about job groups &amp; test suites</li>
-#+REVEAL_HTML: <li class="fragment appear"> <i class="fas fa-magic"></i></li>
-#+REVEAL_HTML: <li class="fragment appear">🎉</li>
-#+REVEAL_HTML: </ol>
+#+ATTR_REVEAL: :frag (appear)
+1. start from the [[https://github.com/os-autoinst/os-autoinst-distri-example][minimal example]]
+2. schedule tests in =main.pm=
+3. learn about job groups & test suites
+4. @@html: <i class="fas fa-magic"></i>@@
+5. 🎉
 
 
 ** Example: bare metal testing the RPi
@@ -260,14 +256,10 @@ on chat.freenode.net:
 
 * Links
 
-#+REVEAL_HTML: <ul>
-#+REVEAL_HTML: source code: <li style="list-style-type:none;"><i class="fab fa-github"></i>
-#+REVEAL_HTML: <a href="https://github.com/os-autoinst/">os-autoinst</a>
-#+REVEAL_HTML: </li>
-#+REVEAL_HTML: <li style="list-style-type:none;"><a href="https://open.qa">openQA homepage</a></li>
-#+REVEAL_HTML: <li style="list-style-type:none;"><a href="https://openqa.opensuse.org">openSUSE's instance</a></li>
-#+REVEAL_HTML: <li style="list-style-type:none;"><a href="https://openqa.fedoraproject.org">Fedora's instance</a></li>
-#+REVEAL_HTML: </ul>
+- source code: @@html: <i class="fab fa-github"></i>@@ [[https://github.com/os-autoinst/][os-autoinst]]
+- [[https://open.qa][openQA Homepage]]
+- [[https://openqa.opensuse.org][openSUSE's instance]]
+- [[https://openqa.fedoraproject.org][Fedora's instance]]
 
 
 * TODO Legal
@@ -282,7 +274,10 @@ on chat.freenode.net:
 - [[https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Unclesamwantyou.jpg/771px-Unclesamwantyou.jpg][U.S. Army recruitment poster]] public domain
 
 
-* Questions?
+* Questions? / Demo
 
-#+ATTR_REVEAL: :frag (appear)
+#+ATTR_REVEAL: :frag appear :frag_idx 1
 *Answers!*
+
+#+ATTR_REVEAL: :frag appear :frag_idx 2
+Demo!
