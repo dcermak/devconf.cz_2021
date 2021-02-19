@@ -25,7 +25,7 @@
 #+REVEAL_TITLE_SLIDE: CC BY 4.0 <i class="fab fa-creative-commons"></i> <i class="fab fa-creative-commons-by"></i></a></p>
 
 
-* whoami
+* who -u
 
 Dan Čermák
 
@@ -41,7 +41,7 @@ Dan Čermák
 #+REVEAL_HTML: </ul>
 
 
-* TODO Agenda
+* Agenda
 
   - [[What is openQA?][What is openQA?]]
   - [[Using openQA][Using openQA]]
@@ -67,7 +67,7 @@ Dan Čermák
 - match video feed using OpenCV
 
 
-** TODO Sales Pitch
+** Sales Pitch
 
 #+begin_notes
 Why should you all care?
@@ -82,8 +82,11 @@ Why should you all care?
 Why should I use openQA?
 #+ATTR_REVEAL: :frag (appear)
 - automate manual system level testing
-- @@html: <i class='eos-icons'>developer_board</i>@@ runs on bare metal
+- @@html: <i class="fas fa-users"></i>@@ user-centric testing
+- runs on bare metal
 - test labeling: @@html:<i class="fas fa-tags"></i>@@, @@html:<i class="fas fa-bug"></i>@@ and reviews @@html: <i class="eos-icons">rate_review</i>@@
+- battle tested (used at @@html: <i class="fab fa-suse"></i>, <i class="fab fa-fedora"></i>, <i class="fab fa-redhat"></i>@@, …)
+- [[https://linux-test-project.github.io/][LTP]] integration
 
 
 ** Architecture
@@ -95,6 +98,7 @@ Why should I use openQA?
 - worker spawns =os-autoinst= on SUT (usually qemu, can be bare metal or other virt)
 - =os-autoinst= does heavy lifting: issue input, record output, match images
 - =os-autoinst= communicates via serial line by default (can be "upgraded" later on)
+- image matching is *not* mandatory, works without it!
 #+END_NOTES
 
 #+REVEAL_HTML: <img src="./media/openqa_architecture.svg" height="500px"/>
@@ -113,14 +117,14 @@ Why should I use openQA?
 ** Image recognition
 
 #+begin_notes
+this is a *feature*, can run openQA without
+
 video matched via *needles*:
 - json & png with areas & similarity level
 - needles specify tags (used by testapi \rarr needles matched by tag, not by filename)
 - =isotovideo= matches needles against video feed received via VNC
 - areas matched needn't be in same position w.r.t each other
 - matching occurs about once per sec
-
-\Rightarrow show needle editor
 #+end_notes
 
 #+REVEAL_HTML: <img src="./media/openqa_needle_view.png" height="500px"/>
@@ -139,10 +143,10 @@ video matched via *needles*:
 #+end_notes
 
 #+ATTR_REVEAL: :frag (appear)
-- produce test artifacts & handle assets
-- dependency between tests & scheduling
-- tag & review workflows and tests
-- test grouping
+- @@html: <i class="far fa-hdd"></i>@@ produce test artifacts & handle assets
+- @@html: <i class="fas fa-code-branch"></i>@@ dependency between tests & scheduling
+- @@html: <i class="fas fa-tags"></i>@@ tag & review workflows and tests
+- @@html: <i class="fas fa-layer-group"></i>@@ test grouping
 - support qemu/libvirt, ipmi, bare metal, x3270
 
 
@@ -181,15 +185,6 @@ video matched via *needles*:
 #+REVEAL_HTML: <li class="fragment appear"><i class="fas fa-tachometer-alt"></i> fast tests required</li>
 #+REVEAL_HTML: <li class="fragment appear"><i class="fas fa-satellite"></i> <b>really</b> exotic hardware
 #+REVEAL_HTML: </ul>
-
-
-** Why should you use openQA?
-
-#+ATTR_REVEAL: :frag (appear)
-- battle tested
-- user-centric testing
-- [[https://linux-test-project.github.io/][LTP]] integration
-- used by @@html: <i class="fab fa-suse"></i>, <i class="fab fa-fedora"></i>, <i class="fab fa-redhat"></i>@@, …
 
 
 ** Getting started
@@ -264,20 +259,20 @@ future additions:
 # -
 
 
-* TODO Recent development & Outlook
+# * TODO Recent development & Outlook
 
-#+BEGIN_NOTES
-- clone tests & needles from git via variables
-- automatically label jobs via regex in tickets
-- "investigation jobs" = auto restart on failure
-- hooks for various job finish states: [[http://open.qa/docs/#_enable_custom_hook_scripts_on_job_done_based_on_result][docs]]
-#+END_NOTES
+# #+BEGIN_NOTES
+# - clone tests & needles from git via variables
+# - automatically label jobs via regex in tickets
+# - "investigation jobs" = auto restart on failure
+# - hooks for various job finish states: [[http://open.qa/docs/#_enable_custom_hook_scripts_on_job_done_based_on_result][docs]]
+# #+END_NOTES
 
-#+ATTR_REVEAL: :frag (appear)
-- Run test code from any git repository
-- Automatic job labelling based on expressions in tickets
-- Automatic investigation jobs on failures
-- post job hooks
+# #+ATTR_REVEAL: :frag (appear)
+# - Run test code from any git repository
+# - Automatic job labelling based on expressions in tickets
+# - Automatic investigation jobs on failures
+# - post job hooks
 
 
 * Use it!
@@ -301,10 +296,10 @@ on chat.freenode.net:
 - [[https://openqa.fedoraproject.org][Fedora's instance]]
 
 
-* TODO Legal
+* Legal
 
 - [[https://raw.githubusercontent.com/os-autoinst/openQA/master/assets/images/logo.svg][openQA Logo]] GPL-2.0-or-later
-- [[https://opencv.org/wp-content/uploads/2020/07/OpenCV_logo_black.svg][OpenCV Logo]] *FIXME*
+- [[https://opencv.org/wp-content/uploads/2020/07/OpenCV_logo_black.svg][OpenCV Logo]] \copy OpenCV
 - [[https://raw.githubusercontent.com/devconfcz/devconf/master/assets/media/logo/devconf-cz/devconf-cz-bw.svg][DevConf CZ Logo]]  GPL-3.0-or-later or GPL-3.0
 - [[https://upload.wikimedia.org/wikipedia/en/c/cb/Raspberry_Pi_Logo.svg][Raspberry Pi Logo]] \copy and \trade of the Raspberry Pi Foundation
 - [[https://revealjs.com/][reveal.js]] MIT
