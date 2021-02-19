@@ -1,0 +1,17 @@
+* DevConf 2021 slides
+
+This repository contains the slides for my talks at [[https://www.devconf.info/cz/][DevConf.cz 2021]]:
+
+
+** Testing Extensions for Visual Studio Code
+
+[[https://devconfcz2021.sched.com/event/gmLC/testing-extensions-for-visual-studio-code][schedule]]
+
+[[file:test_vscode_extensions/testing_vscode_extensions.org][slides]]
+
+
+** openQA - end to end testing of operating systems
+
+[[https://devconfcz2021.sched.com/event/gmOp/openqa-end-to-end-testing-of-operating-systems][schedule]]
+
+[[file:openqa/openqa.org][slides]]
