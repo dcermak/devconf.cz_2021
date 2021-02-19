@@ -16,10 +16,10 @@
 #+REVEAL_EXTRA_CSS: ../node_modules/eos-icons/dist/css/eos-icons.css
 #+REVEAL_HIGHLIGHT_CSS: ../node_modules/reveal.js/plugin/highlight/zenburn.css
 
-#+REVEAL_TITLE_SLIDE: <h2 class="title"><img src="./media/openqa_logo.svg" height="100px" style="margin-bottom:0px"/> %t</h2>
+#+REVEAL_TITLE_SLIDE: <h2 class="title"><img src="./media/openqa_logo.svg" height="100px" style="margin-bottom:-20px"/> %t</h2>
 #+REVEAL_TITLE_SLIDE: <p class="subtitle" style="color: Gray;">%s</p>
 #+REVEAL_TITLE_SLIDE: <p class="author">%a %e</p>
-#+REVEAL_TITLE_SLIDE: <img src="./media/devconf-cz-bw.svg" height="50px"/>
+#+REVEAL_TITLE_SLIDE: <img src="../media/devconf-cz-bw.svg" height="50px"/>
 #+REVEAL_TITLE_SLIDE: <p class="date">%d</p>
 #+REVEAL_TITLE_SLIDE: <p xmlns:dct="http://purl.org/dc/terms/" xmlns:cc="http://creativecommons.org/ns#"><a href="https://creativecommons.org/licenses/by/4.0" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">
 #+REVEAL_TITLE_SLIDE: CC BY 4.0 <i class="fab fa-creative-commons"></i> <i class="fab fa-creative-commons-by"></i></a></p>
@@ -249,6 +249,14 @@ future additions:
 
 #+REVEAL_HTML: <img src="./media/rpi_testing.svg" height="500px"/>
 
+#+REVEAL: split
+
+#+REVEAL_HTML: <img src="./media/20210216_160449.jpg" height="600px"/>
+
+#+REVEAL: split
+
+#+REVEAL_HTML: <img src="./media/IMG_20210218_154500.jpg" height="600px"/>
+
 
 # ** Anatomy of a test group
 
@@ -303,6 +311,7 @@ on chat.freenode.net:
 - [[https://fontawesome.com/][Font Awesome]] CC-BY-4.0 and SIL OFL 1.1 and MIT
 - [[https://eos-icons.com/][EOS Icons]] MIT
 - [[https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Unclesamwantyou.jpg/771px-Unclesamwantyou.jpg][U.S. Army recruitment poster]] public domain
+- RPi testing photo by [[https://twitter.com/GardetGuillaume][Guillaume Gardet]]
 
 
 * Questions? / Demo
