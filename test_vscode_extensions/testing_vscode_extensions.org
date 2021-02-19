@@ -285,6 +285,7 @@ await pkgJsonEditor.formatDocument();
 - [[https://code.visualstudio.com/api/working-with-extensions/testing-extension][basic unit test setup]]
 - [[https://github.com/microsoft/vscode-js-debug/blob/master/src/test/testRunner.ts][code coverage setup]]
 - [[https://kiwitcms.org/][Kiwi TCMS]]
+- slides: @@html: <i class="fab fa-github"></i>@@ [[https://github.com/dcermak/devconf.cz_2021][=dcermak/devconf.cz_2021=]]
 
 
 * Legal

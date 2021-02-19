@@ -294,6 +294,7 @@ on chat.freenode.net:
 - [[https://open.qa][openQA Homepage]]
 - [[https://openqa.opensuse.org][openSUSE's instance]]
 - [[https://openqa.fedoraproject.org][Fedora's instance]]
+- slides: @@html: <i class="fab fa-github"></i>@@ [[https://github.com/dcermak/devconf.cz_2021][=dcermak/devconf.cz_2021=]]
 
 
 * Legal
