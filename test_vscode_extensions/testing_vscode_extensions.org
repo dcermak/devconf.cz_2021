@@ -273,7 +273,7 @@ await pkgJsonEditor.formatDocument();
 #+ATTR_REVEAL: :frag (appear)
 - 🐌 slow and resource demanding
 - avoid explicit sleeps
-- @@html: <i class="far fa-eye-slash"></i>@@ certain elements invisible by default
+- @@html: <i class="fas fa-low-vision"></i>@@ certain elements invisible by default
 - *no* test coverage
 
 
