@@ -2,7 +2,7 @@
 #+AUTHOR: Dan Čermák
 #+DATE: 20.2.2021
 #+EMAIL: dcermak@suse.com
-#+TITLE: Testing VSCode extensions
+#+TITLE: Testing VSCode Extensions
 
 #+REVEAL_ROOT: ../node_modules/reveal.js/
 #+REVEAL_THEME: simple
@@ -14,23 +14,25 @@
 #+REVEAL_EXTRA_CSS: ../node_modules/@fortawesome/fontawesome-free/css/all.min.css
 #+REVEAL_HIGHLIGHT_CSS: ../node_modules/reveal.js/plugin/highlight/zenburn.css
 
-#+REVEAL_TITLE_SLIDE: <h2 class="title">%t</h2>
+#+REVEAL_TITLE_SLIDE: <h2 class="title"><img src="./images/vscode_logo.svg" height="100px" style="margin-bottom:-20px"/> %t</h2>
 #+REVEAL_TITLE_SLIDE: <p class="subtitle" style="color: Gray;">%s</p>
-#+REVEAL_TITLE_SLIDE: <p class="author">%a <%e></p>
-#+REVEAL_TITLE_SLIDE: DevConf.cz 2021, %d
-#+REVEAL_TITLE_SLIDE: <p xmlns:dct="http://purl.org/dc/terms/" xmlns:cc="http://creativecommons.org/ns#">This work is licensed under <a href="https://creativecommons.org/licenses/by/4.0" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">
+#+REVEAL_TITLE_SLIDE: <p class="author">%a %e</p>
+#+REVEAL_TITLE_SLIDE: <img src="../media/devconf-cz-bw.svg" height="50px"/>
+#+REVEAL_TITLE_SLIDE: <p class="date">%d</p>
+#+REVEAL_TITLE_SLIDE: <p xmlns:dct="http://purl.org/dc/terms/" xmlns:cc="http://creativecommons.org/ns#"><a href="https://creativecommons.org/licenses/by/4.0" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">
 #+REVEAL_TITLE_SLIDE: CC BY 4.0 <i class="fab fa-creative-commons"></i> <i class="fab fa-creative-commons-by"></i></a></p>
 
 
-* whoami
+* who -u
 
 Dan Čermák
 
 #+REVEAL_HTML: <p style="text-align:left">
 #+REVEAL_HTML: <ul>
-#+REVEAL_HTML: <li>Software Developer @SUSE
-#+REVEAL_HTML: <li>I <i class="far fa-heart"></i> testing</li>
-#+REVEAL_HTML: <li style="list-style-type:none;"> </li>
+#+REVEAL_HTML: <li style="list-style-type:none;"><i class="fab fa-suse"></i> Software Developer @SUSE
+#+REVEAL_HTML: <li style="list-style-type:none;"><i class="fab fa-fedora"></i> i3 SIG, Package maintainer
+#+REVEAL_HTML: <li style="list-style-type:none;"><i class="far fa-heart"></i> testing</li>
+#+REVEAL_HTML: <li style="list-style-type:none;">&nbsp</li>
 #+REVEAL_HTML: <li style="list-style-type:none;"><i class="fab fa-github"></i> <a href="https://github.com/D4N/">D4N</a> / <a href="https://github.com/dcermak/">dcermak</a></li>
 #+REVEAL_HTML: <li style="list-style-type:none;"><i class="fab fa-mastodon"></i> <a href="https://mastodon.social/@Defolos">@Defolos@mastodon.social</a></li>
 #+REVEAL_HTML: <li style="list-style-type:none;"><i class="fab fa-twitter"></i> <a href="https://twitter.com/DefolosDC/">@DefolosDC</a></li>
@@ -73,7 +75,20 @@ Why is it hard?
 #+ATTR_REVEAL: :frag (appear)
 - UIs cary a lot of state
 - testing workflows is uncommon
-- what you get is not what you see
+- 🙈 what you test is not what you see
+
+
+** External Services
+
+#+begin_notes
+- external stuff, e.g. keytar, buildservice, etc needs to be handled
+- for system libraries, use =LD_PRELOAD=
+- for services, use development environments (prefered) or staging area
+#+end_notes
+
+#+ATTR_REVEAL: :frag (appear)
+- external libraries: mock or =LD_PRELOAD=
+- external service: development environment or staging
 
 
 * Unit testing
@@ -88,7 +103,7 @@ Why is it hard?
 #+ATTR_REVEAL: :frag (appear)
 - test one functionality of one unit/function
 - anything touching the UI needs extensive setup & teardown
-- external services need to be mocked
+- external services should be mocked
 
 
 ** Getting started
@@ -110,7 +125,7 @@ Why is it hard?
 
 #+begin_notes
 - settings are stored in a json file
-- can be written and read from vscode-test ()
+- can be written and read from vscode-test
 #+end_notes
 
 #+ATTR_REVEAL: :frag appear :frag_idx 1
@@ -191,7 +206,7 @@ quickPick.onDidChangeValue(async (val: string) => {
 
 #+REVEAL_HTML: <i class="fas fa-robot"></i> automated execution of your extensions' workflows
 
-** vscode-extension-tester
+** =vscode-extension-tester=
 
 #+begin_notes
 - vscode is just a webpage (electron…) \rarr use existing tooling for end-to-end testing
@@ -199,10 +214,9 @@ quickPick.onDidChangeValue(async (val: string) => {
 - vscode extension tester wraps selenium's page object API \rarr more convenient to work with
 #+end_notes
 
-#+REVEAL_HTML: <i class="fab fa-github"></i>
-#+REVEAL_HTML: <a href="https://github.com/redhat-developer/vscode-extension-tester">redhat-developer/vscode-extension-tester</a>
+@@html: <i class="fab fa-github"></i>@@ [[https://github.com/redhat-developer/vscode-extension-tester][redhat-developer/vscode-extension-tester]]
 
-#+REVEAL_HTML: leverages selenium webdriver <img src="images/Selenium_Logo.png" height="64" width="64"/>
+@@html: <img src="images/Selenium_Logo.png" height="64" width="64" style="margin-bottom:-20px"/>@@ leverages selenium webdriver
 
 #+ATTR_REVEAL: :frag appear :frag_idx 2
 #+begin_src typescript
@@ -257,13 +271,25 @@ await pkgJsonEditor.formatDocument();
 #+end_notes
 
 #+ATTR_REVEAL: :frag (appear)
-- integration tests tend to be very slow and resource demanding
+- 🐌 slow and resource demanding
 - avoid explicit sleeps
-- certain elements invisible by default
+- @@html: <i class="far fa-eye-slash"></i>@@ certain elements invisible by default
 - *no* test coverage
+
+
+* Links
+
+- @@html: <i class="fab fa-github"></i>@@ [[https://github.com/SUSE/open-build-service-connector][SUSE/open-build-service-connector]]
+- @@html: <i class="fab fa-github"></i>@@ [[https://github.com/redhat-developer/vscode-extension-tester][redhat-developer/vscode-extension-tester]]
+- [[https://mochajs.org/][mochajs.org]]
+- [[https://code.visualstudio.com/api/working-with-extensions/testing-extension][basic unit test setup]]
+- [[https://github.com/microsoft/vscode-js-debug/blob/master/src/test/testRunner.ts][code coverage setup]]
+- [[https://kiwitcms.org/][Kiwi TCMS]]
+
 
 * Legal
 
+- [[https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg][VSCode Logo]] \copy Microsoft
 - [[https://commons.wikimedia.org/wiki/File:Selenium_Logo.png][Selenium Logo]] CC-BY-SA 4.0
 - [[https://revealjs.com/][reveal.js]] MIT
 - [[https://fontawesome.com/][Font Awesome]] CC-BY-4.0 and SIL OFL 1.1 and MIT
@@ -272,4 +298,7 @@ await pkgJsonEditor.formatDocument();
 * Questions?
 
 #+ATTR_REVEAL: :frag appear :frag_idx 2
-Thank you for your time!
+*Answers!*
+
+#+ATTR_REVEAL: :frag appear :frag_idx 3
+Demo
